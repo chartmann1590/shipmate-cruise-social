@@ -1,19 +1,10 @@
-import crypto from 'node:crypto';
-
 const projectId = process.env.FIREBASE_PROJECT_ID || 'shipmate-cruise-social-2026';
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON || '{}');
-
-if (!serviceAccount.client_email || !serviceAccount.private_key) throw new Error('FIREBASE_SERVICE_ACCOUNT_JSON is missing client_email or private_key');
-
-const encode = (value) => Buffer.from(value).toString('base64url');
-const assertion = [
-  encode(JSON.stringify({ alg: 'RS256', typ: 'JWT' })),
-  encode(JSON.stringify({ iss: serviceAccount.client_email, scope: 'https://www.googleapis.com/auth/firebase.messaging https://www.googleapis.com/auth/datastore', aud: 'https://oauth2.googleapis.com/token', iat: Math.floor(Date.now() / 1000), exp: Math.floor(Date.now() / 1000) + 3600 }))
-].join('.');
-const signature = crypto.createSign('RSA-SHA256').update(assertion).sign(serviceAccount.private_key, 'base64url');
-const tokenResponse = await fetch('https://oauth2.googleapis.com/token', { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer', assertion: `${assertion}.${signature}` }) });
-if (!tokenResponse.ok) throw new Error(`OAuth token request failed: ${tokenResponse.status} ${await tokenResponse.text()}`);
-const { access_token: accessToken } = await tokenResponse.json();
+const apiKey = process.env.FIREBASE_API_KEY;
+const relayEmail = process.env.FIREBASE_RELAY_EMAIL;
+const relayPassword = process.env.FIREBASE_RELAY_PASSWORD;
+const authResponse = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email: relayEmail, password: relayPassword, returnSecureToken: true }) });
+if (!authResponse.ok) throw new Error(`Relay auth failed: ${authResponse.status} ${await authResponse.text()}`);
+const { idToken: accessToken } = await authResponse.json();
 
 const firestoreRoot = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents`;
 const firestoreHeaders = { Authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' };

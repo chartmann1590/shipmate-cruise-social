@@ -18,5 +18,7 @@ jobs:
       - name: Deliver pending FCM notifications
         env:
           FIREBASE_PROJECT_ID: shipmate-cruise-social-2026
-          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_RELAY_EMAIL: ${{ secrets.FIREBASE_RELAY_EMAIL }}
+          FIREBASE_RELAY_PASSWORD: ${{ secrets.FIREBASE_RELAY_PASSWORD }}
         run: node relay/push-notifications.mjs

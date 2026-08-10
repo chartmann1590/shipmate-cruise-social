@@ -10,6 +10,10 @@ service cloud.firestore {
       return signedIn() && request.auth.uid == uid;
     }
 
+    function isPushRelay() {
+      return signedIn() && request.auth.token.email == 'shipmate-push-relay@shipmate-social.dev';
+    }
+
     match /users/{uid} {
       allow read: if isOwner(uid);
       allow create: if isOwner(uid);
@@ -18,11 +22,11 @@ service cloud.firestore {
 
       match /pushTokens/{token} {
         allow create, update: if isOwner(uid);
-        allow read, delete: if isOwner(uid);
+        allow read, delete: if isOwner(uid) || isPushRelay();
       }
 
       match /notifications/{notificationId} {
-        allow read, update, delete: if isOwner(uid);
+        allow read, update, delete: if isOwner(uid) || isPushRelay();
         allow create: if signedIn() && request.resource.data.actorId == request.auth.uid;
       }
     }
