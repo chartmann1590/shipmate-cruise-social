@@ -10,7 +10,7 @@ const firestoreRoot = `https://firestore.googleapis.com/v1/projects/${projectId}
 const firestoreHeaders = { Authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' };
 const runQuery = await fetch(`${firestoreRoot}:runQuery`, {
   method: 'POST', headers: firestoreHeaders,
-  body: JSON.stringify({ structuredQuery: { from: [{ collectionId: 'notifications', allDescendants: true }], where: { fieldFilter: { field: { fieldPath: 'sent' }, op: 'EQUAL', value: { booleanValue: false } } }, limit: 100 } })
+  body: JSON.stringify({ structuredQuery: { from: [{ collectionId: 'notificationOutbox' }], where: { fieldFilter: { field: { fieldPath: 'sent' }, op: 'EQUAL', value: { booleanValue: false } } }, limit: 100 } })
 });
 if (!runQuery.ok) throw new Error(`Firestore query failed: ${runQuery.status} ${await runQuery.text()}`);
 const rows = (await runQuery.json()).filter((row) => row.document);
@@ -21,9 +21,8 @@ let delivered = 0;
 
 for (const row of rows) {
   const document = row.document;
-  const match = document.name.match(/\/documents\/users\/([^/]+)\/notifications\//);
-  if (!match) continue;
-  const uid = match[1];
+  const uid = fieldValue(document.fields, 'recipientId');
+  if (!uid) continue;
   const tokensResponse = await fetch(`${firestoreRoot}/users/${uid}/pushTokens?pageSize=100`, { headers: { Authorization: `Bearer ${accessToken}` } });
   const tokensPayload = tokensResponse.ok ? await tokensResponse.json() : { documents: [] };
   const tokens = (tokensPayload.documents || []).map((item) => item.fields?.token?.stringValue).filter(Boolean);

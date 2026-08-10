@@ -11,7 +11,7 @@ service cloud.firestore {
     }
 
     function isPushRelay() {
-      return signedIn() && request.auth.token.email == 'shipmate-push-relay@shipmate-social.dev';
+      return signedIn() && (request.auth.uid == 'wCrYFVk53PO6DxzLdWBSgo4B4Tf2' || request.auth.token.email == 'shipmate-push-relay@shipmate-social.dev');
     }
 
     match /users/{uid} {
@@ -81,6 +81,11 @@ service cloud.firestore {
       allow read: if signedIn();
       allow create: if signedIn();
       allow update, delete: if false;
+    }
+
+    match /notificationOutbox/{notificationId} {
+      allow create: if signedIn() && request.resource.data.actorId == request.auth.uid;
+      allow read, update, delete: if isPushRelay();
     }
 
     match /sailings/{sailingId}/events/{eventId} {

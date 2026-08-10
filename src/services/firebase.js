@@ -127,7 +127,8 @@ export const savePushToken = (uid, token) => setDoc(doc(db, 'users', uid, 'pushT
 
 export const createNotification = (uid, data) => {
   if (!uid || !db) return Promise.resolve();
-  return addDoc(collection(db, 'users', uid, 'notifications'), { ...data, actorId: auth?.currentUser?.uid || '', read: false, sent: false, createdAt: serverTimestamp() });
+  const notification = { ...data, actorId: auth?.currentUser?.uid || '', recipientId: uid, read: false, sent: false, createdAt: serverTimestamp() };
+  return Promise.all([addDoc(collection(db, 'users', uid, 'notifications'), notification), addDoc(collection(db, 'notificationOutbox'), notification)]);
 };
 
 export const subscribeToNotifications = (uid, onChange, onError) => {
