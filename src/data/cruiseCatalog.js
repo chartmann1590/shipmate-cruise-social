@@ -40,6 +40,29 @@ export const CRUISE_LINES = [
   line('seadream', 'SeaDream Yacht Club', 'SEADREAM', 'SeaDream Club', ['Member', 'Silver', 'Gold'], ships('seadream', ['SeaDream I', 'SeaDream II'], 'Yacht'))
 ];
 
+const fleetExpansions = {
+  RCCL: ['Adventure of the Seas', 'Allure of the Seas', 'Anthem of the Seas', 'Brilliance of the Seas', 'Enchantment of the Seas', 'Explorer of the Seas', 'Freedom of the Seas', 'Grandeur of the Seas', 'Harmony of the Seas', 'Independence of the Seas', 'Jewel of the Seas', 'Liberty of the Seas', 'Mariner of the Seas', 'Navigator of the Seas', 'Oasis of the Seas', 'Ovation of the Seas', 'Quantum of the Seas', 'Radiance of the Seas', 'Rhapsody of the Seas', 'Serenade of the Seas', 'Spectrum of the Seas', 'Utopia of the Seas', 'Vision of the Seas', 'Voyager of the Seas'],
+  CARN: ['Carnival Breeze', 'Carnival Conquest', 'Carnival Dream', 'Carnival Elation', 'Carnival Firenze', 'Carnival Freedom', 'Carnival Glory', 'Carnival Legend', 'Carnival Liberty', 'Carnival Luminosa', 'Carnival Miracle', 'Carnival Panorama', 'Carnival Paradise', 'Carnival Pride', 'Carnival Spirit', 'Carnival Sunrise', 'Carnival Sunshine', 'Carnival Valor', 'Carnival Venezia', 'Carnival Vista'],
+  NCL: ['Norwegian Aqua', 'Norwegian Breakaway', 'Norwegian Dawn', 'Norwegian Epic', 'Norwegian Escape', 'Norwegian Gem', 'Norwegian Getaway', 'Norwegian Jade', 'Norwegian Jewel', 'Norwegian Joy', 'Norwegian Pearl', 'Norwegian Sky', 'Norwegian Spirit', 'Norwegian Star', 'Norwegian Sun'],
+  CEL: ['Celebrity Constellation', 'Celebrity Eclipse', 'Celebrity Equinox', 'Celebrity Infinity', 'Celebrity Millennium', 'Celebrity Reflection', 'Celebrity Silhouette', 'Celebrity Solstice', 'Celebrity Summit'],
+  MSC: ['MSC Armonia', 'MSC Bellissima', 'MSC Divina', 'MSC Euribia', 'MSC Fantasia', 'MSC Grandiosa', 'MSC Lirica', 'MSC Magnifica', 'MSC Meraviglia', 'MSC Musica', 'MSC Opera', 'MSC Orchestra', 'MSC Poesia', 'MSC Preziosa', 'MSC Seashore', 'MSC Seaside', 'MSC Seascape', 'MSC Sinfonia', 'MSC Splendida', 'MSC Virtuosa'],
+  DISNEY: ['Disney Adventure', 'Disney Magic', 'Disney Wonder', 'Disney Dream', 'Disney Fantasy', 'Disney Wish', 'Disney Treasure', 'Disney Destiny'],
+  PRINCESS: ['Caribbean Princess', 'Coral Princess', 'Crown Princess', 'Diamond Princess', 'Discovery Princess', 'Enchanted Princess', 'Grand Princess', 'Island Princess', 'Majestic Princess', 'Regal Princess', 'Royal Princess', 'Ruby Princess', 'Sapphire Princess', 'Sky Princess', 'Sun Princess'],
+  HAL: ['Eurodam', 'Koningsdam', 'Nieuw Amsterdam', 'Nieuw Statendam', 'Noordam', 'Oosterdam', 'Rotterdam', 'Westerdam', 'Zaandam', 'Zuiderdam'],
+  VIRGIN: ['Brilliant Lady'],
+  PANDO: ['Azura', 'Aurora', 'Arcadia', 'Arvia', 'Britannia', 'Iona', 'Ventura'],
+  COSTA: ['Costa Pacifica', 'Costa Serena', 'Costa Diadema', 'Costa Deliziosa', 'Costa Fascinosa', 'Costa Favolosa', 'Costa Fortuna', 'Costa Firenze', 'Costa Pacifica', 'Costa Smeralda', 'Costa Toscana']
+};
+
+Object.entries(fleetExpansions).forEach(([code, names]) => {
+  const cruiseLine = CRUISE_LINES.find((item) => item.code === code);
+  if (!cruiseLine) return;
+  const existing = new Set(cruiseLine.ships.map((ship) => ship.name.toLowerCase()));
+  names.forEach((name, index) => {
+    if (!existing.has(name.toLowerCase())) cruiseLine.ships.push({ id: `${code.toLowerCase()}-expanded-${index + 1}`, name, class: 'Fleet vessel', capacity: 'See cruise line' });
+  });
+});
+
 CRUISE_LINES.sort((a, b) => a.name.localeCompare(b.name));
 CRUISE_LINES.forEach((cruiseLine) => cruiseLine.ships.sort((a, b) => a.name.localeCompare(b.name)));
 
