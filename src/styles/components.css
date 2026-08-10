@@ -1,0 +1,766 @@
+/* Component Specific Styles for ShipMate */
+
+/* Hero Banner & Active Sailing Header */
+.sailing-hero-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+  margin-bottom: 24px;
+}
+
+.sailing-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(7, 13, 25, 0.4) 0%, rgba(7, 13, 25, 0.92) 100%);
+  z-index: 1;
+}
+
+.sailing-hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* Post Cards */
+.post-card {
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: var(--radius-md);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.post-card:hover {
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.post-author-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.author-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 2px solid var(--primary-ocean);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+.post-image-container {
+  margin: 14px 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  max-height: 400px;
+}
+
+.post-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.post-image:hover {
+  transform: scale(1.02);
+}
+
+.post-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-glass);
+}
+
+.reaction-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.reaction-btn:hover {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--primary-glow);
+}
+
+.reaction-btn.active {
+  background: rgba(2, 132, 199, 0.3);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+}
+
+/* Comments section */
+.comments-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.comment-item {
+  display: flex;
+  gap: 10px;
+  font-size: 0.88rem;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+}
+
+/* Chat Module Layout */
+.chat-container {
+  display: flex;
+  height: calc(100vh - 140px);
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .chat-container {
+    height: calc(100vh - 150px);
+    flex-direction: column;
+  }
+}
+
+.chat-sidebar {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .chat-sidebar {
+    width: 100%;
+    max-height: 180px;
+  }
+}
+
+.chat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-messages-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chat-bubble {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.chat-bubble.me {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+}
+
+.chat-bubble.other {
+  align-self: flex-start;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid var(--border-glass);
+  color: #f1f5f9;
+  border-bottom-left-radius: 4px;
+}
+
+.chat-input-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(15, 23, 42, 0.9);
+  border-top: 1px solid var(--border-glass);
+}
+
+.chat-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.call-panel {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-glass);
+  background: rgba(46, 124, 131, 0.08);
+}
+
+.call-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.call-panel-heading strong {
+  display: block;
+  margin-top: 2px;
+  color: var(--primary-blue);
+  font-size: 0.86rem;
+}
+
+.call-panel-heading button,
+.call-end-button {
+  padding: 7px 12px;
+  border-radius: 9px;
+  background: var(--primary-blue);
+  color: #fff;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.call-stage {
+  position: relative;
+  min-height: 170px;
+  margin-top: 10px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #0d3345;
+}
+
+.call-remote-video {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.call-local-video {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 92px;
+  height: 70px;
+  object-fit: cover;
+  border: 2px solid #fff;
+  border-radius: 9px;
+}
+
+.call-end-button {
+  margin-top: 10px;
+  background: var(--accent-rose);
+}
+
+.chat-action-button,
+.join-group-trigger {
+  padding: 7px 10px;
+  border: 1px solid rgba(46, 124, 131, 0.25);
+  border-radius: 9px;
+  background: rgba(46, 124, 131, 0.1);
+  color: var(--primary-blue);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.join-group-trigger {
+  padding: 6px 10px;
+}
+
+.chat-input-field {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-full);
+  padding: 10px 18px;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.chat-input-field:focus {
+  border-color: var(--primary-glow);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+}
+
+/* Itinerary Timeline */
+.itinerary-day-card {
+  margin-bottom: 20px;
+  padding: 20px;
+  border-left: 4px solid var(--primary-ocean);
+}
+
+.itinerary-day-card.today {
+  border-left-color: var(--accent-gold);
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.08) 0%, rgba(15, 23, 42, 0.8) 100%);
+}
+
+.event-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+  margin-top: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+}
+
+.event-row:hover {
+  background: rgba(56, 189, 248, 0.08);
+  border-color: rgba(56, 189, 248, 0.2);
+}
+
+.sailings-card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.sailings-card-heading p {
+  margin-top: 4px;
+  color: var(--text-secondary);
+  font-size: 0.86rem;
+}
+
+.sailing-add-button,
+.sailing-edit-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: var(--primary-blue);
+  background: rgba(46, 124, 131, 0.12);
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.sailing-list {
+  display: grid;
+  gap: 10px;
+}
+
+.sailing-list-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--border-glass);
+  border-radius: 12px;
+  background: rgba(240, 235, 225, 0.55);
+}
+
+.sailing-list-item.active {
+  border-color: rgba(46, 124, 131, 0.55);
+  background: rgba(46, 124, 131, 0.08);
+}
+
+.sailing-list-main {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 2px;
+  text-align: left;
+  background: transparent;
+  color: var(--text-primary);
+}
+
+.sailing-list-main strong {
+  color: var(--primary-blue);
+  font-family: var(--font-title);
+}
+
+.sailing-list-main > span:last-child {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+}
+
+.sailing-list-kicker {
+  color: var(--accent-gold);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.privacy-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.privacy-card p {
+  margin-top: 4px;
+  color: var(--text-secondary);
+  font-size: 0.86rem;
+}
+
+.privacy-card select {
+  min-width: 260px;
+  padding: 10px;
+  border: 1px solid var(--border-glass);
+  border-radius: 9px;
+  background: #fffdf8;
+  color: var(--text-primary);
+}
+
+.legal-page {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: clamp(24px, 5vw, 56px);
+}
+
+.legal-page h1 {
+  margin-top: 8px;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+.legal-page h2 {
+  margin-top: 28px;
+  font-size: 1.1rem;
+}
+
+.legal-page p {
+  margin-top: 8px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.legal-updated {
+  font-size: 0.8rem;
+}
+
+.legal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 12px 20px 22px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.legal-footer a {
+  color: var(--primary-blue);
+  font-weight: 700;
+}
+
+.terms-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+}
+
+.terms-consent input {
+  margin-top: 3px;
+  accent-color: var(--accent-teal);
+}
+
+.terms-consent a {
+  color: var(--primary-blue);
+  font-weight: 700;
+}
+
+.modal-heading-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.modal-heading-row button {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.modal-heading-row h3 {
+  margin-top: 4px;
+  color: var(--primary-blue) !important;
+}
+
+.eyebrow {
+  color: var(--accent-gold);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.modal-copy {
+  margin: 16px 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.invite-qr {
+  display: block;
+  width: 220px;
+  height: 220px;
+  margin: 18px auto;
+  border-radius: 14px;
+}
+
+.invite-url {
+  overflow: hidden;
+  padding: 10px;
+  border: 1px solid var(--border-glass);
+  border-radius: 10px;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.invite-copy-button,
+.join-group-form button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  margin-top: 10px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  background: var(--primary-blue);
+  color: #fff;
+  font-weight: 800;
+}
+
+.join-group-form {
+  display: grid;
+  gap: 10px;
+}
+
+.google-auth-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px;
+  border: 1px solid var(--border-glass);
+  border-radius: 10px;
+  background: #fffdf8;
+  color: var(--primary-blue);
+  font-weight: 800;
+}
+
+.google-mark {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  color: #4285f4;
+  font-weight: 900;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  height: 1px;
+  flex: 1;
+  background: var(--border-glass);
+}
+
+.ship-search-input {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-glass);
+  border-radius: 9px;
+  background: #fffdf8;
+  color: var(--text-primary);
+}
+
+.join-group-form input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-glass);
+  border-radius: 10px;
+  color: var(--text-primary);
+  background: #fffdf8;
+  letter-spacing: 0.08em;
+}
+
+/* Cruise Pass / Invitation Ticket */
+.cruise-pass-ticket {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border: 2px dashed rgba(56, 189, 248, 0.4);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  position: relative;
+  text-align: center;
+  box-shadow: var(--shadow-glow);
+}
+
+.qr-code-box {
+  width: 140px;
+  height: 140px;
+  margin: 16px auto;
+  background: #fff;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Drink Counter Tool Widget */
+.drink-tracker-widget {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.15) 0%, rgba(15, 23, 42, 0.8) 100%);
+  border: 1px solid rgba(20, 184, 166, 0.3);
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+}
+
+/* Light content surfaces keep the dark nautical accents intentional. */
+.post-card,
+.chat-sidebar,
+.chat-main,
+.itinerary-day-card {
+  background: rgba(255, 253, 248, 0.94);
+}
+
+.post-card:hover,
+.event-row:hover {
+  border-color: rgba(46, 124, 131, 0.35);
+}
+
+.reaction-btn {
+  background: #f0ebe1;
+  color: var(--text-secondary);
+}
+
+.reaction-btn.active {
+  background: rgba(46, 124, 131, 0.12);
+  color: var(--primary-blue);
+  border-color: rgba(46, 124, 131, 0.35);
+  box-shadow: none;
+}
+
+.chat-input-bar {
+  background: #f0ebe1;
+}
+
+.chat-input-field {
+  background: #fffdf8;
+  color: var(--text-primary);
+}
+
+.chat-bubble.other {
+  background: #f0ebe1;
+  color: var(--text-primary);
+}
+
+.itinerary-day-card.today {
+  background: linear-gradient(135deg, rgba(184, 134, 59, 0.12), rgba(255, 253, 248, 0.94));
+}
+
+@media (max-width: 768px) {
+  .chat-container {
+    height: calc(100dvh - 164px);
+  }
+
+  .chat-sidebar {
+    overflow: hidden;
+  }
+
+  .post-card,
+  .glass-panel {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .post-actions {
+    flex-wrap: wrap;
+  }
+
+  .post-actions .reaction-btn {
+    flex: 1 1 auto;
+    min-width: 0;
+    justify-content: center;
+    padding-left: 6px;
+    padding-right: 6px;
+    font-size: 0.76rem;
+  }
+
+  select {
+    max-width: calc(100vw - 80px);
+    min-width: 0;
+  }
+
+  .sailings-card-heading {
+    flex-direction: column;
+  }
+
+  .privacy-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .privacy-card select {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .sailing-add-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .chat-header-actions {
+    gap: 4px;
+  }
+
+  .chat-action-button {
+    padding: 6px 7px;
+    font-size: 0.68rem;
+  }
+}

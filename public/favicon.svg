@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <rect width="512" height="512" rx="128" fill="url(#ocean-grad)"/>
+  <path d="M120 340C180 370 332 370 392 340C410 331 432 344 424 364C400 420 320 448 256 448C192 448 112 420 88 364C80 344 102 331 120 340Z" fill="#38bdf8" opacity="0.9"/>
+  <path d="M70 270L160 160H352L442 270H70Z" fill="#ffffff"/>
+  <path d="M180 160V100C180 90 190 80 200 80H312C322 80 332 90 332 100V160H180Z" fill="#e0f2fe"/>
+  <circle cx="216" cy="120" r="14" fill="#0284c7"/>
+  <circle cx="256" cy="120" r="14" fill="#0284c7"/>
+  <circle cx="296" cy="120" r="14" fill="#0284c7"/>
+  <path d="M256 160V290M200 220H312M170 290C170 340 342 340 342 290" stroke="#0284c7" stroke-width="24" stroke-linecap="round"/>
+  <defs>
+    <linearGradient id="ocean-grad" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0f172a"/>
+      <stop offset="0.5" stop-color="#0369a1"/>
+      <stop offset="1" stop-color="#0284c7"/>
+    </linearGradient>
+  </defs>
+</svg>
