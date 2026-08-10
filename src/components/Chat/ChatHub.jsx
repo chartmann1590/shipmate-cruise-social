@@ -5,6 +5,7 @@ import { MessageSquare, Users, Send, Plus, Copy, Check, Sparkles } from '../Icon
 import { GroupInviteModal } from '../Modals/GroupInviteModal';
 import { JoinGroupModal } from '../Modals/JoinGroupModal';
 import { CallPanel } from './CallPanel';
+import { VoiceNoteRecorder } from './VoiceNoteRecorder';
 
 export const ChatHub = () => {
   const { 
@@ -18,7 +19,8 @@ export const ChatHub = () => {
     directUsers,
     setIsNewGroupModalOpen,
     joinGroup,
-    startCall
+    startCall,
+    sendVoiceNote
   } = useChat();
 
   const { userProfile, activeShip } = useCruise();
@@ -49,6 +51,8 @@ export const ChatHub = () => {
     sendMessage(activeChatId, inputText, userProfile);
     setInputText('');
   };
+
+  const handleVoiceNote = (audioData, mimeType, duration) => sendVoiceNote(activeChatId, audioData, mimeType, userProfile, duration);
 
   const handleCopyInvite = (code) => {
     navigator.clipboard.writeText(code);
@@ -240,7 +244,7 @@ export const ChatHub = () => {
                     {msg.senderName}
                   </div>
                 )}
-                <div>{msg.text}</div>
+                <div>{msg.audioData ? <audio className="voice-note-player" controls preload="metadata" src={msg.audioData} aria-label={`Voice note from ${msg.senderName}`} /> : msg.text}</div>
                 <div style={{ fontSize: '0.68rem', opacity: 0.7, textAlign: 'right', marginTop: '4px' }}>
                   {msg.time}
                 </div>
@@ -275,6 +279,7 @@ export const ChatHub = () => {
           >
             <Send size={18} />
           </button>
+          <VoiceNoteRecorder onSend={handleVoiceNote} />
         </form>
       </div>
       {isInviteOpen && activeGroup && <GroupInviteModal group={activeGroup} onClose={() => setIsInviteOpen(false)} />}

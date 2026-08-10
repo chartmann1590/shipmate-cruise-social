@@ -66,6 +66,14 @@ export const ChatProvider = ({ children }) => {
     await Promise.all((group?.memberIds || []).filter((memberId) => memberId !== user.id).map((memberId) => createNotification(memberId, { type: 'message', actorName: user.name, text: `${user.name} sent a message in ${group.name}.`, url: '/?tab=chats' })));
   };
 
+  const sendVoiceNote = async (chatId, audioData, mimeType, user, duration) => {
+    if (!chatId || !audioData || !user?.id) return;
+    await createMessage(chatId, { senderId: user.id, senderName: user.name, avatar: user.avatar || '/favicon.svg', text: 'Voice note', audioData, audioMime: mimeType, audioDuration: duration });
+    await updateGroupPreview(chatId, { lastMessage: `${user.name.split(' ')[0]} sent a voice note`, lastTime: 'Just now' });
+    const group = groups.find((item) => item.id === chatId);
+    await Promise.all((group?.memberIds || []).filter((memberId) => memberId !== user.id).map((memberId) => createNotification(memberId, { type: 'voice-note', actorName: user.name, text: `${user.name} sent a voice note in ${group.name}.`, url: '/?tab=chats' })));
+  };
+
   const createGroup = async ({ name, category, ship, avatarSymbol, sailingId, visibility }) => {
     if (!currentUser?.id) return;
     const id = await createRemoteGroup({ name, category, ship, avatar: avatarSymbol, uid: currentUser.id, sailingId, visibility });
@@ -98,6 +106,7 @@ export const ChatProvider = ({ children }) => {
       activeChatType,
       setActiveChatType,
       sendMessage,
+      sendVoiceNote,
       createGroup,
       joinGroup,
       startCall,

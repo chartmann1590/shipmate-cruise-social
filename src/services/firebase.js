@@ -219,7 +219,8 @@ export const createGroup = async ({ name, category, ship, avatar, uid, sailingId
 
 export const createMessage = (groupId, data) => addDoc(collection(db, 'groups', groupId, 'messages'), {
   ...data,
-  createdAt: serverTimestamp()
+  createdAt: serverTimestamp(),
+  audioExpiresAt: data.audioData ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() : null
 });
 
 export const updateGroupPreview = (groupId, data) => updateDoc(doc(db, 'groups', groupId), data);

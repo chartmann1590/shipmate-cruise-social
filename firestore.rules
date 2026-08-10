@@ -71,7 +71,7 @@ service cloud.firestore {
       match /messages/{messageId} {
         allow read: if signedIn();
         allow create: if signedIn() && request.resource.data.senderId == request.auth.uid;
-        allow update, delete: if signedIn() && resource.data.senderId == request.auth.uid;
+        allow update, delete: if signedIn() && (resource.data.senderId == request.auth.uid || isPushRelay());
       }
 
       match /calls/{callId} {
