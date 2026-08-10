@@ -1079,6 +1079,32 @@
     font-size: 0.76rem;
   }
 
+  .chat-input-bar {
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+
+  .chat-input-field {
+    min-width: 0;
+    flex: 1 1 calc(100% - 58px);
+  }
+
+  .chat-input-bar > button[type="submit"] {
+    flex: 0 0 42px;
+  }
+
+  .voice-note-recorder {
+    flex: 1 0 100%;
+  }
+
+  .voice-record-button,
+  .voice-recording-button {
+    display: block;
+    width: 100%;
+    min-height: 42px;
+    font-size: 0.82rem;
+  }
+
   select {
     max-width: calc(100vw - 80px);
     min-width: 0;
