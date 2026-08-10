@@ -39,3 +39,10 @@ for (const row of rows) {
 }
 
 console.log(JSON.stringify({ notifications: rows.length, delivered }));
+
+const expiredQuery = await fetch(`${firestoreRoot}:runQuery`, { method: 'POST', headers: firestoreHeaders, body: JSON.stringify({ structuredQuery: { from: [{ collectionId: 'messages', allDescendants: true }], where: { fieldFilter: { field: { fieldPath: 'audioExpiresAt' }, op: 'LESS_THAN', value: { timestampValue: new Date().toISOString() } } }, limit: 100 } }) });
+if (expiredQuery.ok) {
+  const expiredRows = (await expiredQuery.json()).filter((row) => row.document);
+  for (const row of expiredRows) await fetch(`https://firestore.googleapis.com/v1/${row.document.name}`, { method: 'DELETE', headers: firestoreHeaders });
+  console.log(JSON.stringify({ expiredAudioDeleted: expiredRows.length }));
+}
