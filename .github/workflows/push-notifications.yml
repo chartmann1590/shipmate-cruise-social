@@ -16,9 +16,13 @@ jobs:
         with:
           node-version: 22
       - name: Deliver pending FCM notifications
+        run: npm install web-push@3.6.7 --no-save --ignore-scripts
+      - name: Deliver pending Web Push notifications
         env:
           FIREBASE_PROJECT_ID: shipmate-cruise-social-2026
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
           FIREBASE_RELAY_EMAIL: ${{ secrets.FIREBASE_RELAY_EMAIL }}
           FIREBASE_RELAY_PASSWORD: ${{ secrets.FIREBASE_RELAY_PASSWORD }}
+          WEB_PUSH_PUBLIC_KEY: ${{ secrets.WEB_PUSH_PUBLIC_KEY }}
+          WEB_PUSH_PRIVATE_KEY: ${{ secrets.WEB_PUSH_PRIVATE_KEY }}
         run: node relay/push-notifications.mjs

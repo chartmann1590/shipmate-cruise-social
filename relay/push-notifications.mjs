@@ -1,4 +1,5 @@
 const projectId = process.env.FIREBASE_PROJECT_ID || 'shipmate-cruise-social-2026';
+const webPush = (await import('web-push')).default;
 const apiKey = process.env.FIREBASE_API_KEY;
 const relayEmail = process.env.FIREBASE_RELAY_EMAIL;
 const relayPassword = process.env.FIREBASE_RELAY_PASSWORD;
@@ -23,17 +24,16 @@ for (const row of rows) {
   const document = row.document;
   const uid = fieldValue(document.fields, 'recipientId');
   if (!uid) continue;
-  const tokensResponse = await fetch(`${firestoreRoot}/users/${uid}/pushTokens?pageSize=100`, { headers: { Authorization: `Bearer ${accessToken}` } });
-  const tokensPayload = tokensResponse.ok ? await tokensResponse.json() : { documents: [] };
-  const tokens = (tokensPayload.documents || []).map((item) => item.fields?.token?.stringValue).filter(Boolean);
+  const subscriptionsResponse = await fetch(`${firestoreRoot}/users/${uid}/pushSubscriptions?pageSize=100`, { headers: { Authorization: `Bearer ${accessToken}` } });
+  const subscriptionsPayload = subscriptionsResponse.ok ? await subscriptionsResponse.json() : { documents: [] };
+  const subscriptions = (subscriptionsPayload.documents || []).map((item) => item.fields).filter(Boolean).map((fields) => ({ endpoint: fields.endpoint?.stringValue, expirationTime: fields.expirationTime?.doubleValue || null, keys: { p256dh: fields.keys?.mapValue?.fields?.p256dh?.stringValue, auth: fields.keys?.mapValue?.fields?.auth?.stringValue } })).filter((item) => item.endpoint && item.keys.p256dh && item.keys.auth);
   const fields = document.fields || {};
   const text = fieldValue(fields, 'text') || 'You have a new ShipMate update.';
   const url = fieldValue(fields, 'url') || '/?tab=chats';
   let allDelivered = true;
-  for (const token of tokens) {
-    const response = await fetch(`https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`, { method: 'POST', headers: { Authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' }, body: JSON.stringify({ message: { token, notification: { title: 'ShipMate', body: text }, webpush: { fcmOptions: { link: `https://shipmate-cruise-social-2026.web.app${url}` } } } }) });
-    if (response.ok) delivered += 1;
-    else { allDelivered = false; console.error(`FCM delivery failed for ${uid}: ${response.status} ${await response.text()}`); }
+  for (const subscription of subscriptions) {
+    try { await webPush.sendNotification(subscription, JSON.stringify({ title: 'ShipMate', body: text, url: `https://shipmate-cruise-social-2026.web.app${url}` }), { vapidDetails: { subject: 'mailto:shipmate-push-relay@shipmate-social.dev', publicKey: process.env.WEB_PUSH_PUBLIC_KEY, privateKey: process.env.WEB_PUSH_PRIVATE_KEY } }); delivered += 1; }
+    catch (error) { allDelivered = false; console.error(`Web Push delivery failed for ${uid}: ${error.message}`); }
   }
   if (allDelivered) await markSent(document.name);
 }

@@ -1,5 +1,7 @@
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
-import { app, savePushToken } from './firebase';
+import { app, savePushToken, savePushSubscription } from './firebase';
+
+const decodeKey = (value) => Uint8Array.from(atob(value.replace(/-/g, '+').replace(/_/g, '/')), (char) => char.charCodeAt(0));
 
 export const requestNotificationPermission = async () => {
   if (!('Notification' in window) || !('serviceWorker' in navigator)) return 'unsupported';
@@ -12,7 +14,9 @@ export const registerPushNotifications = async (uid, onMessageReceived) => {
   if (permission !== 'granted' || !app || !uid) return permission;
   const messaging = getMessaging(app);
   const registration = await navigator.serviceWorker.ready;
-  const token = await getToken(messaging, { serviceWorkerRegistration: registration });
+  const subscription = await registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: decodeKey(import.meta.env.VITE_PUSH_PUBLIC_KEY) });
+  await savePushSubscription(uid, subscription.toJSON());
+  const token = await getToken(messaging, { serviceWorkerRegistration: registration }).catch(() => null);
   if (token) await savePushToken(uid, token);
   onMessage(messaging, (payload) => onMessageReceived?.(payload));
   return token ? 'granted' : 'unavailable';

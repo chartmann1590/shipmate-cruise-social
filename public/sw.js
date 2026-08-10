@@ -42,3 +42,10 @@ messaging.onBackgroundMessage((payload) => {
   const options = { body: payload.notification?.body || 'New activity from your sailing.', icon: '/favicon.svg', badge: '/favicon.svg', data: { url: payload.fcmOptions?.link || '/?tab=chats' } };
   self.registration.showNotification(title, options);
 });
+
+self.addEventListener('push', (event) => {
+  if (!event.data) return;
+  const payload = event.data.json();
+  const title = payload.title || 'ShipMate';
+  event.waitUntil(self.registration.showNotification(title, { body: payload.body || 'New activity from your sailing.', icon: '/favicon.svg', badge: '/favicon.svg', data: { url: payload.url || '/?tab=chats' } }));
+});

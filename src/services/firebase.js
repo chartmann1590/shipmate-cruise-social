@@ -125,6 +125,11 @@ export const saveUserProfile = (uid, changes) => {
 
 export const savePushToken = (uid, token) => setDoc(doc(db, 'users', uid, 'pushTokens', token), { token, createdAt: serverTimestamp(), userAgent: navigator.userAgent });
 
+export const savePushSubscription = (uid, subscription) => {
+  const id = encodeURIComponent(subscription.endpoint).slice(0, 500);
+  return setDoc(doc(db, 'users', uid, 'pushSubscriptions', id), { ...subscription, createdAt: serverTimestamp(), userAgent: navigator.userAgent });
+};
+
 export const createNotification = (uid, data) => {
   if (!uid || !db) return Promise.resolve();
   const notification = { ...data, actorId: auth?.currentUser?.uid || '', recipientId: uid, read: false, sent: false, createdAt: serverTimestamp() };

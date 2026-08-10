@@ -25,6 +25,11 @@ service cloud.firestore {
         allow read, delete: if isOwner(uid) || isPushRelay();
       }
 
+      match /pushSubscriptions/{subscriptionId} {
+        allow create, update: if isOwner(uid);
+        allow read, delete: if isOwner(uid) || isPushRelay();
+      }
+
       match /notifications/{notificationId} {
         allow read, update, delete: if isOwner(uid) || isPushRelay();
         allow create: if signedIn() && request.resource.data.actorId == request.auth.uid;
