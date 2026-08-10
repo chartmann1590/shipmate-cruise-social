@@ -59,12 +59,15 @@ const profileFromUser = (user, data = {}) => ({
   coverPhoto: data.coverPhoto || '/hero_banner.jpg',
   bio: data.bio || 'Planning the next port call.',
   loyaltyLine: data.loyaltyLine || 'Independent cruiser',
+  loyaltyLineCode: data.loyaltyLineCode || '',
   loyaltyTier: data.loyaltyTier || 'New on board',
   loyaltyPoints: data.loyaltyPoints || 0,
   cabinNumber: data.cabinNumber || '',
   reservationCode: data.reservationCode || '',
   currentShipName: data.currentShipName || '',
   currentShipId: data.currentShipId || '',
+  cruiseStartDate: data.cruiseStartDate || '',
+  cruiseEndDate: data.cruiseEndDate || '',
   sailingId: data.sailingId || '',
   badges: data.badges || [],
   location: data.location || '',
@@ -139,6 +142,17 @@ export const createNotification = (uid, data) => {
 export const subscribeToNotifications = (uid, onChange, onError) => {
   if (!db || !uid) return () => {};
   return onSnapshot(query(collection(db, 'users', uid, 'notifications'), where('read', '==', false), limit(20)), (snapshot) => onChange(snapshot.docs.map((item) => ({ id: item.id, ...item.data() }))), onError);
+};
+
+export const createSupportTicket = (data) => addDoc(collection(db, 'supportTickets'), {
+  ...data,
+  status: 'open',
+  createdAt: serverTimestamp()
+});
+
+export const subscribeToSupportTickets = (uid, onChange, onError) => {
+  if (!db || !uid) return () => {};
+  return onSnapshot(query(collection(db, 'supportTickets'), where('createdBy', '==', uid), limit(25)), (snapshot) => onChange(snapshot.docs.map((item) => ({ id: item.id, ...item.data() }))), onError);
 };
 
 export const subscribeToPosts = (sailingId, onChange, onError) => {

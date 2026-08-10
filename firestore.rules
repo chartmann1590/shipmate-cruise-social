@@ -93,6 +93,13 @@ service cloud.firestore {
       allow read, update, delete: if isPushRelay();
     }
 
+    match /supportTickets/{ticketId} {
+      allow create: if signedIn() && request.resource.data.createdBy == request.auth.uid;
+      allow read: if signedIn() && (resource.data.createdBy == request.auth.uid || isPushRelay());
+      allow update: if isPushRelay() || (signedIn() && resource.data.createdBy == request.auth.uid);
+      allow delete: if signedIn() && resource.data.createdBy == request.auth.uid;
+    }
+
     match /sailings/{sailingId}/events/{eventId} {
       allow read: if signedIn();
       allow write: if false;
