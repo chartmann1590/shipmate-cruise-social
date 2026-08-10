@@ -631,6 +631,27 @@
   font-weight: 800;
 }
 
+.pdf-import-button {
+  cursor: pointer;
+}
+
+.pdf-import-button input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.import-status {
+  padding: 10px 13px;
+  border: 1px solid rgba(125, 221, 211, 0.25);
+  border-radius: 10px;
+  background: rgba(125, 221, 211, 0.08);
+  color: var(--primary-cyan);
+  font-size: 0.82rem;
+}
+
 .live-weather {
   color: var(--accent-gold);
   font-size: 0.82rem;

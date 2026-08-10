@@ -174,6 +174,17 @@ export const CruiseProvider = ({ children }) => {
     persistItinerary([...itinerary, { day: nextDayNumber, date: dayData.date || `Day ${nextDayNumber}`, title: dayData.title || 'New cruise day', port: dayData.port || 'At sea', type: dayData.type || 'sea', status: 'upcoming', weather: 'Weather will load for this location', events: [] }]);
   };
 
+  const replaceItinerary = (days) => persistItinerary(days.map((day, index) => ({
+    day: day.day || index + 1,
+    date: day.date || `Day ${index + 1}`,
+    title: day.title || 'Cruise day',
+    port: day.port || 'Location to confirm',
+    type: day.type || 'port',
+    status: index === 0 ? 'today' : 'upcoming',
+    weather: 'Weather will load for this location',
+    events: day.events || []
+  })));
+
   const toggleJoinEvent = (dayIndex, eventId) => {
     const updated = [...itinerary];
     const day = updated[dayIndex];
@@ -208,6 +219,7 @@ export const CruiseProvider = ({ children }) => {
       linkReservation,
       addItineraryEvent,
       addItineraryDay,
+      replaceItinerary,
       toggleJoinEvent,
       venues: SHIP_VENUES,
       cruiseLines: CRUISE_LINES

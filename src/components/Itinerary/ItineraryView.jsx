@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useCruise } from '../../context/CruiseContext';
 import { Calendar, Clock, MapPin, Plus, Users, Award, Compass, CheckCircle2 } from '../Icons';
 import { fetchPortWeather } from '../../services/weather';
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
 
 export const ItineraryView = () => {
-  const { itinerary, activeShip, addItineraryEvent, addItineraryDay, toggleJoinEvent } = useCruise();
+  const { itinerary, activeShip, addItineraryEvent, addItineraryDay, replaceItinerary, toggleJoinEvent } = useCruise();
   const [activeDayIndex, setActiveDayIndex] = useState(1); // Default to Today (CocoCay)
   const [isAddEventOpen, setIsAddEventOpen] = useState(false);
 
@@ -15,6 +18,7 @@ export const ItineraryView = () => {
   const [dayTitle, setDayTitle] = useState('');
   const [dayPort, setDayPort] = useState('');
   const [liveWeather, setLiveWeather] = useState('');
+  const [importStatus, setImportStatus] = useState('');
 
   const currentDay = itinerary[activeDayIndex] || itinerary[0] || { day: 1, date: 'Day 1', title: 'Your first cruise day', port: 'Choose a port or sea day', type: 'sea', status: 'today', weather: 'Weather will load for a real location', events: [] };
 
@@ -35,6 +39,37 @@ export const ItineraryView = () => {
   };
 
   const handleAddDay = (event) => { event.preventDefault(); addItineraryDay({ title: dayTitle, port: dayPort, date: `Day ${itinerary.length + 1}` }); setDayTitle(''); setDayPort(''); setIsAddDayOpen(false); };
+
+  const handlePdfImport = async (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    setImportStatus('Reading your itinerary PDF…');
+    try {
+      const buffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
+      const pageText = [];
+      for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+        const page = await pdf.getPage(pageNumber);
+        const content = await page.getTextContent();
+        pageText.push(content.items.map((item) => item.str).join('\n'));
+      }
+      const text = pageText.join('\n');
+      const matches = [...text.matchAll(/Day\s*(\d+)[^\n]*/gi)];
+      const importedDays = matches.map((match, index) => {
+        const block = text.slice(match.index, matches[index + 1]?.index || text.length);
+        const header = match[0].replace(/Day\s*\d+\s*[:.\-]?\s*/i, '').trim();
+        const location = block.match(/(?:Port|Location|Destination)\s*[:\-]\s*([^\n]+)/i)?.[1]?.trim();
+        return { day: Number(match[1]), date: `Day ${match[1]}`, title: header || 'Cruise day', port: location || header || 'Location to confirm', type: /sea day|at sea|ocean/i.test(block) ? 'sea' : 'port' };
+      });
+      if (!importedDays.length) throw new Error('No day headings were found. Add headings such as “Day 1 - Miami” to the PDF and try again.');
+      replaceItinerary(importedDays);
+      setActiveDayIndex(0);
+      setImportStatus(`Imported ${importedDays.length} days from ${file.name}.`);
+    } catch (error) {
+      setImportStatus(error.message || 'That PDF could not be imported.');
+    }
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -76,8 +111,11 @@ export const ItineraryView = () => {
             <span>Add Event / Excursion</span>
           </button>
           <button className="itinerary-secondary-button" onClick={() => setIsAddDayOpen(true)}><Plus size={16} /> Add day</button>
+          <label className="itinerary-secondary-button pdf-import-button"><input type="file" accept="application/pdf,.pdf" onChange={handlePdfImport} /> Import PDF</label>
         </div>
       </div>
+
+      {importStatus && <div className="import-status" role="status">{importStatus}</div>}
 
       {/* Day Selector Horizontal Tabs */}
       <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '6px' }}>
