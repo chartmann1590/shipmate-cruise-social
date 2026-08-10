@@ -572,19 +572,29 @@ input, textarea, select {
 @media (max-width: 560px) {
   .app-header {
     align-items: flex-start;
+    flex-wrap: wrap;
   }
 
   .header-actions {
-    max-width: 150px;
+    width: 100%;
+    max-width: none;
     gap: 4px;
+    justify-content: space-between;
   }
 
   .header-actions > button {
-    width: 34px;
+    width: auto;
     min-width: 34px;
     height: 34px;
     justify-content: center;
     border-radius: 12px !important;
+  }
+
+  .header-actions .notification-toggle,
+  .header-actions .settings-header-button {
+    padding-left: 9px !important;
+    padding-right: 9px !important;
+    white-space: nowrap;
   }
 
   .main-content {

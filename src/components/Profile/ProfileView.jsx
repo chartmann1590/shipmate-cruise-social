@@ -223,7 +223,7 @@ export const ProfileView = ({ onOpenSync, onOpenSharePass, onOpenSettings }) => 
 
       <div className="glass-panel privacy-card" style={{ padding: '24px' }}>
         <div><h3 style={{ fontSize: '1.15rem', color: '#fff' }}>Profile privacy</h3><p>Choose whether other cruisers can discover your profile.</p></div>
-        <select value={currentUser.profileVisibility || 'private'} onChange={(event) => updateProfilePrivacy(event.target.value)}><option value="private">Private: only people I connect with</option><option value="public">Public: discoverable on my sailing</option></select>
+        <select className="privacy-select" aria-label="Profile visibility" value={currentUser.profileVisibility || 'private'} onChange={(event) => updateProfilePrivacy(event.target.value)}><option value="private">Private: only people I connect with</option><option value="public">Public: discoverable on my sailing</option></select>
       </div>
       <SupportCenter />
     </div>
