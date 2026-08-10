@@ -2,7 +2,7 @@ const projectId = process.env.FIREBASE_PROJECT_ID || 'shipmate-cruise-social-202
 const apiKey = process.env.FIREBASE_API_KEY;
 const relayEmail = process.env.FIREBASE_RELAY_EMAIL;
 const relayPassword = process.env.FIREBASE_RELAY_PASSWORD;
-const githubToken = process.env.ISSUE_RELAY_TOKEN;
+const githubToken = process.env.GITHUB_TOKEN;
 const repo = process.env.GITHUB_REPO || 'chartmann1590/shipmate-cruise-social';
 
 const authResponse = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email: relayEmail, password: relayPassword, returnSecureToken: true }) });

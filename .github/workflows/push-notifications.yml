@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      issues: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -32,6 +33,6 @@ jobs:
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
           FIREBASE_RELAY_EMAIL: ${{ secrets.FIREBASE_RELAY_EMAIL }}
           FIREBASE_RELAY_PASSWORD: ${{ secrets.FIREBASE_RELAY_PASSWORD }}
-          ISSUE_RELAY_TOKEN: ${{ secrets.ISSUE_RELAY_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPO: chartmann1590/shipmate-cruise-social
         run: node relay/github-issues.mjs
