@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /?tab=chats
+Disallow: /?tab=profile
+Disallow: /?tab=settings
+Disallow: /?tab=tools
+Disallow: /?tab=itinerary
+
+Sitemap: https://shipmate-cruise-social-2026.web.app/sitemap.xml
