@@ -26,3 +26,12 @@ jobs:
           WEB_PUSH_PUBLIC_KEY: ${{ secrets.WEB_PUSH_PUBLIC_KEY }}
           WEB_PUSH_PRIVATE_KEY: ${{ secrets.WEB_PUSH_PRIVATE_KEY }}
         run: node relay/push-notifications.mjs
+      - name: Create GitHub issues from support tickets
+        env:
+          FIREBASE_PROJECT_ID: shipmate-cruise-social-2026
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_RELAY_EMAIL: ${{ secrets.FIREBASE_RELAY_EMAIL }}
+          FIREBASE_RELAY_PASSWORD: ${{ secrets.FIREBASE_RELAY_PASSWORD }}
+          ISSUE_RELAY_TOKEN: ${{ secrets.ISSUE_RELAY_TOKEN }}
+          GITHUB_REPO: chartmann1590/shipmate-cruise-social
+        run: node relay/github-issues.mjs

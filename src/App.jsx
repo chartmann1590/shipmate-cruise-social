@@ -21,6 +21,7 @@ import { AuthModal } from './components/Modals/AuthModal';
 import { LegalView } from './components/Legal/LegalView';
 import { OnboardingView } from './components/Onboarding/OnboardingView';
 import { ErrorBoundary } from './components/System/ErrorBoundary';
+import { SettingsView } from './components/Settings/SettingsView';
 
 import { WifiOff, Download, Sparkles, X } from './components/Icons';
 
@@ -41,7 +42,7 @@ const MainAppContent = () => {
 
   useEffect(() => {
     const requestedTab = new URLSearchParams(window.location.search).get('tab');
-    if (['feed', 'itinerary', 'chats', 'tools', 'profile'].includes(requestedTab)) setActiveTab(requestedTab);
+    if (['feed', 'itinerary', 'chats', 'tools', 'profile', 'settings'].includes(requestedTab)) setActiveTab(requestedTab);
   }, []);
 
   useEffect(() => {
@@ -83,6 +84,7 @@ const MainAppContent = () => {
         <Header 
           onOpenSync={() => { if (!currentUser) return setIsAuthModalOpen(true); setEditingSailing(null); setIsSyncOpen(true); }}
           onOpenSharePass={() => setIsSharePassOpen(true)} 
+          onOpenSettings={() => setActiveTab('settings')}
         />
 
         {/* Offline Sea-Day Alert Banner */}
@@ -158,8 +160,10 @@ const MainAppContent = () => {
             <ProfileView 
               onOpenSync={(sailing) => { setEditingSailing(sailing || null); setIsSyncOpen(true); }}
               onOpenSharePass={() => setIsSharePassOpen(true)} 
+              onOpenSettings={() => setActiveTab('settings')}
             />
           )}
+          {currentUser && !needsOnboarding && activeTab === 'settings' && <SettingsView />}
         </main>
         <footer className="legal-footer"><a href="?tab=terms">Terms of Use</a><a href="?tab=privacy">Privacy Policy</a><span>Manage notifications and profile visibility from your account.</span></footer>
       </div>

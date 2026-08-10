@@ -369,6 +369,16 @@ input, textarea, select {
   font-weight: 800;
 }
 
+.settings-header-button {
+  padding: 7px 10px;
+  border: 1px solid rgba(125, 221, 211, 0.25);
+  border-radius: 9px;
+  background: rgba(125, 221, 211, 0.1);
+  color: var(--primary-cyan);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
 .main-content {
   min-width: 0;
 }
@@ -532,13 +542,31 @@ input, textarea, select {
   }
 
   .header-actions > button span {
-    display: none;
+    display: inline;
   }
 
   .sailing-hero-card {
     min-height: 230px;
     padding: 22px;
   }
+}
+
+:root[data-theme="light"] {
+  --bg-dark: #f5f1e8;
+  --bg-surface: #fffdf8;
+  --bg-card: #fffdf8;
+  --bg-card-hover: #f8f3e9;
+  --bg-glass: rgba(255, 253, 248, 0.82);
+  --border-glass: #e2d9ca;
+  --border-glow: #8bb9bd;
+  --primary-cyan: #2e7c83;
+  --primary-blue: #0d3345;
+  --accent-gold: #b8863b;
+  --accent-teal: #2e7c83;
+  --accent-rose: #c65c58;
+  --text-primary: #17303a;
+  --text-secondary: #60737a;
+  --text-muted: #8a989a;
 }
 
 @media (max-width: 560px) {

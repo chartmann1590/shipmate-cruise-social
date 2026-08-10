@@ -144,6 +144,96 @@
   }
 }
 
+.settings-page {
+  display: grid;
+  gap: 16px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.settings-hero {
+  padding: 24px 4px 12px;
+}
+
+.settings-hero h1 {
+  margin-top: 6px;
+  color: var(--text-primary);
+  font-size: clamp(2.2rem, 6vw, 4rem);
+}
+
+.settings-hero p,
+.settings-card p {
+  margin-top: 8px;
+  color: var(--text-secondary);
+}
+
+.settings-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 22px;
+}
+
+.settings-card h2 {
+  margin-top: 4px;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+.settings-kicker {
+  color: var(--accent-gold);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.segmented-control {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--border-glass);
+  border-radius: 12px;
+}
+
+.segmented-control button,
+.settings-action {
+  padding: 9px 12px;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.segmented-control button.active,
+.settings-action {
+  background: var(--accent-gold);
+  color: #102d44;
+}
+
+.settings-card select {
+  min-width: 220px;
+  padding: 10px;
+  border: 1px solid var(--border-glass);
+  border-radius: 9px;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+.settings-message {
+  color: var(--primary-cyan) !important;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 680px) {
+  .settings-card { align-items: stretch; flex-direction: column; gap: 14px; }
+  .settings-card select, .settings-action { width: 100%; }
+  .segmented-control { width: 100%; }
+  .segmented-control button { flex: 1; }
+}
+
 .chat-sidebar {
   width: 300px;
   display: flex;

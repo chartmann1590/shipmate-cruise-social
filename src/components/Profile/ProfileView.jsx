@@ -2,8 +2,9 @@ import React from 'react';
 import { useCruise } from '../../context/CruiseContext';
 import { useAuth } from '../../context/AuthContext';
 import { Award, Ticket, Ship, RefreshCw, LogOut, User, Plus } from '../Icons';
+import { SupportCenter } from '../Support/SupportCenter';
 
-export const ProfileView = ({ onOpenSync, onOpenSharePass }) => {
+export const ProfileView = ({ onOpenSync, onOpenSharePass, onOpenSettings }) => {
   const { activeShip, sailings, activeSailingId, setActiveSailing, updateProfilePrivacy } = useCruise();
   const { currentUser, logout, setIsAuthModalOpen } = useAuth();
 
@@ -202,6 +203,7 @@ export const ProfileView = ({ onOpenSync, onOpenSharePass }) => {
             <p>Keep future cruises here and switch your active ship whenever plans change.</p>
           </div>
           <button className="sailing-add-button" onClick={() => onOpenSync(null)}><Plus size={15} /> Add sailing</button>
+          <button className="sailing-edit-button" onClick={onOpenSettings}>Settings</button>
         </div>
 
         <div className="sailing-list">
@@ -223,6 +225,7 @@ export const ProfileView = ({ onOpenSync, onOpenSharePass }) => {
         <div><h3 style={{ fontSize: '1.15rem', color: '#fff' }}>Profile privacy</h3><p>Choose whether other cruisers can discover your profile.</p></div>
         <select value={currentUser.profileVisibility || 'private'} onChange={(event) => updateProfilePrivacy(event.target.value)}><option value="private">Private: only people I connect with</option><option value="public">Public: discoverable on my sailing</option></select>
       </div>
+      <SupportCenter />
     </div>
   );
 };

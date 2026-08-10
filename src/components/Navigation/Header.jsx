@@ -5,7 +5,7 @@ import { Ship, Wifi, WifiOff, RefreshCw, Ticket, MapPin, User, LogIn, Award } fr
 import { notifyShipmate, registerPushNotifications } from '../../services/notifications';
 import { subscribeToNotifications } from '../../services/firebase';
 
-export const Header = ({ onOpenSync, onOpenSharePass }) => {
+export const Header = ({ onOpenSync, onOpenSharePass, onOpenSettings }) => {
   const { isOfflineMode, toggleOfflineMode, currentDeckLocation } = useCruise();
   const { currentUser, setIsAuthModalOpen, setAuthMode } = useAuth();
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(() => typeof Notification !== 'undefined' && Notification.permission === 'granted');
@@ -137,8 +137,9 @@ export const Header = ({ onOpenSync, onOpenSharePass }) => {
 
         {/* Offline Toggle button for PWA sea testing */}
         <button className="notification-toggle" onClick={enableNotifications} title="Enable message notifications">
-          <span>{notificationsEnabled ? `Alerts on${unreadNotifications ? ` (${unreadNotifications})` : ''}` : 'Enable alerts'}</span>
+          <span>{notificationsEnabled ? `Notifications on${unreadNotifications ? ` (${unreadNotifications})` : ''}` : 'Enable notifications'}</span>
         </button>
+        <button className="settings-header-button" onClick={onOpenSettings}>Settings</button>
         <button 
           onClick={toggleOfflineMode}
           className={`offline-toggle-btn ${isOfflineMode ? 'offline' : 'online'}`}
