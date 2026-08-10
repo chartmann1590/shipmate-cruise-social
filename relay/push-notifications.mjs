@@ -29,11 +29,13 @@ for (const row of rows) {
   const fields = document.fields || {};
   const text = fieldValue(fields, 'text') || 'You have a new ShipMate update.';
   const url = fieldValue(fields, 'url') || '/?tab=chats';
+  let allDelivered = true;
   for (const token of tokens) {
     const response = await fetch(`https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`, { method: 'POST', headers: { Authorization: `Bearer ${accessToken}`, 'content-type': 'application/json' }, body: JSON.stringify({ message: { token, notification: { title: 'ShipMate', body: text }, webpush: { fcmOptions: { link: `https://shipmate-cruise-social-2026.web.app${url}` } } } }) });
     if (response.ok) delivered += 1;
+    else { allDelivered = false; console.error(`FCM delivery failed for ${uid}: ${response.status} ${await response.text()}`); }
   }
-  await markSent(document.name);
+  if (allDelivered) await markSent(document.name);
 }
 
 console.log(JSON.stringify({ notifications: rows.length, delivered }));
