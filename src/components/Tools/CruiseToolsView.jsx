@@ -3,7 +3,7 @@ import { useCruise } from '../../context/CruiseContext';
 import { Wine, MapPin, Compass, Users, Ship, Plus, Minus } from '../Icons';
 
 export const CruiseToolsView = () => {
-  const { activeShip, userProfile, drinkCount, updateDrinkCount, currentDeckLocation, updateLocation, mockVenues } = useCruise();
+  const { activeShip, userProfile, drinkCount, updateDrinkCount, currentDeckLocation, updateLocation, venues } = useCruise();
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState('All');
 
   const drinkLimit = userProfile?.drinkLimit || 15;
@@ -92,7 +92,7 @@ export const CruiseToolsView = () => {
         </p>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>
-          {mockVenues.map(venue => {
+          {venues.map(venue => {
             const isCurrent = currentDeckLocation.includes(venue.name);
             return (
               <div

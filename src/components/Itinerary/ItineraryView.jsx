@@ -1,21 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCruise } from '../../context/CruiseContext';
 import { Calendar, Clock, MapPin, Plus, Users, Award, Compass, CheckCircle2 } from '../Icons';
+import { fetchPortWeather } from '../../services/weather';
 
 export const ItineraryView = () => {
-  const { itinerary, activeShip, addItineraryEvent, toggleJoinEvent } = useCruise();
+  const { itinerary, activeShip, addItineraryEvent, addItineraryDay, toggleJoinEvent } = useCruise();
   const [activeDayIndex, setActiveDayIndex] = useState(1); // Default to Today (CocoCay)
   const [isAddEventOpen, setIsAddEventOpen] = useState(false);
 
   const [eventTitle, setEventTitle] = useState('');
   const [eventTime, setEventTime] = useState('10:00 AM');
   const [eventCategory, setEventCategory] = useState('social');
+  const [isAddDayOpen, setIsAddDayOpen] = useState(false);
+  const [dayTitle, setDayTitle] = useState('');
+  const [dayPort, setDayPort] = useState('');
+  const [liveWeather, setLiveWeather] = useState('');
 
-  const currentDay = itinerary[activeDayIndex] || itinerary[0];
+  const currentDay = itinerary[activeDayIndex] || itinerary[0] || { day: 1, date: 'Day 1', title: 'Your first cruise day', port: 'Choose a port or sea day', type: 'sea', status: 'today', weather: 'Weather will load for a real location', events: [] };
+
+  useEffect(() => { let active = true; setLiveWeather('Loading live weather…'); fetchPortWeather(currentDay?.port).then((weather) => { if (active) setLiveWeather(weather || currentDay?.weather || 'Weather unavailable'); }).catch(() => active && setLiveWeather(currentDay?.weather || 'Weather unavailable')); return () => { active = false; }; }, [currentDay?.port]);
 
   const handleAddEvent = (e) => {
     e.preventDefault();
-    if (!eventTitle.trim()) return;
+    if (!eventTitle.trim() || !itinerary.length) return;
 
     addItineraryEvent(activeDayIndex, {
       title: eventTitle.trim(),
@@ -26,6 +33,8 @@ export const ItineraryView = () => {
     setEventTitle('');
     setIsAddEventOpen(false);
   };
+
+  const handleAddDay = (event) => { event.preventDefault(); addItineraryDay({ title: dayTitle, port: dayPort, date: `Day ${itinerary.length + 1}` }); setDayTitle(''); setDayPort(''); setIsAddDayOpen(false); };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -66,6 +75,7 @@ export const ItineraryView = () => {
             <Plus size={16} />
             <span>Add Event / Excursion</span>
           </button>
+          <button className="itinerary-secondary-button" onClick={() => setIsAddDayOpen(true)}><Plus size={16} /> Add day</button>
         </div>
       </div>
 
@@ -109,7 +119,7 @@ export const ItineraryView = () => {
               <span className={`badge ${currentDay.type === 'port' ? 'badge-teal' : 'badge-ocean'}`}>
                 {currentDay.type.toUpperCase()} DAY
               </span>
-              <span style={{ fontSize: '0.85rem', color: '#fbbf24', fontWeight: 600 }}>{currentDay.weather}</span>
+              <span className="live-weather">{liveWeather}</span>
             </div>
             <h3 style={{ fontSize: '1.25rem', color: '#fff', marginTop: '6px' }}>{currentDay.port}</h3>
           </div>
@@ -121,8 +131,9 @@ export const ItineraryView = () => {
         </div>
 
         {/* Day Events Listing */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {currentDay.events.map(ev => (
+         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+           {!itinerary.length && <div className="empty-state itinerary-empty"><strong>Your itinerary is empty</strong><span>Add your first day above. Nothing is invented here until you add or import your actual sailing plan.</span></div>}
+           {currentDay.events.map(ev => (
             <div key={ev.id} className="event-row">
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                 <div style={{
@@ -180,6 +191,8 @@ export const ItineraryView = () => {
           ))}
         </div>
       </div>
+
+      {isAddDayOpen && <div className="modal-overlay" onClick={() => setIsAddDayOpen(false)}><div className="modal-card" onClick={(event) => event.stopPropagation()}><span className="eyebrow">Build your sailing</span><h3>Add a cruise day</h3><form className="add-day-form" onSubmit={handleAddDay}><input value={dayTitle} onChange={(event) => setDayTitle(event.target.value)} placeholder="Day title, e.g. Cozumel port day" required /><input value={dayPort} onChange={(event) => setDayPort(event.target.value)} placeholder="Port or location" required /><div><button type="button" onClick={() => setIsAddDayOpen(false)}>Cancel</button><button type="submit">Add day</button></div></form></div></div>}
 
       {/* Add Custom Event Modal */}
       {isAddEventOpen && (

@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useAuth } from './AuthContext';
-import { MOCK_VENUES } from '../data/mockShips';
-import { INITIAL_ITINERARY } from '../data/mockItineraries';
+import { SHIP_VENUES } from '../data/shipVenues';
 import { CRUISE_LINES, findCruiseLine, findShip } from '../data/cruiseCatalog';
 import { saveUserProfile } from '../services/firebase';
 
@@ -33,7 +32,7 @@ export const CruiseProvider = ({ children }) => {
   const [sailings, setSailings] = useState([]);
   const [activeSailingId, setActiveSailingId] = useState('');
   const [activeShip, setActiveShip] = useState({ id: 'unset', name: 'Choose a sailing', dates: 'No sailing selected', currentVoyage: 'Set up your first sailing', homePort: 'Ready when you are', ports: [] });
-  const [itinerary, setItinerary] = useState(INITIAL_ITINERARY);
+  const [itinerary, setItinerary] = useState([]);
   const [isOfflineMode, setIsOfflineMode] = useState(false);
   const [drinkCount, setDrinkCount] = useState(0);
   const [currentDeckLocation, setCurrentDeckLocation] = useState('Lido Deck Pool');
@@ -49,7 +48,7 @@ export const CruiseProvider = ({ children }) => {
     if (!currentUser?.id) {
       setSailings([]);
       setActiveSailingId('');
-      setItinerary(INITIAL_ITINERARY);
+      setItinerary([]);
       setActiveShip({ id: 'unset', name: 'Choose a sailing', dates: 'No sailing selected', currentVoyage: 'Set up your first sailing', homePort: 'Ready when you are', ports: [] });
       return;
     }
@@ -60,7 +59,7 @@ export const CruiseProvider = ({ children }) => {
     setActiveSailingId(selectedId);
     setDrinkCount(currentUser.drinkCount || 0);
     setCurrentDeckLocation(currentUser.location || 'Lido Deck Pool');
-    setItinerary(currentUser.itinerary?.length ? currentUser.itinerary : INITIAL_ITINERARY);
+    setItinerary(currentUser.itinerary || []);
 
     if (!currentUser.sailings?.length && profileSailings.length) {
       persistProfileChanges({ sailings: profileSailings, activeSailingId: selectedId });
@@ -170,6 +169,11 @@ export const CruiseProvider = ({ children }) => {
     persistItinerary(updated);
   };
 
+  const addItineraryDay = (dayData) => {
+    const nextDayNumber = itinerary.length + 1;
+    persistItinerary([...itinerary, { day: nextDayNumber, date: dayData.date || `Day ${nextDayNumber}`, title: dayData.title || 'New cruise day', port: dayData.port || 'At sea', type: dayData.type || 'sea', status: 'upcoming', weather: 'Weather will load for this location', events: [] }]);
+  };
+
   const toggleJoinEvent = (dayIndex, eventId) => {
     const updated = [...itinerary];
     const day = updated[dayIndex];
@@ -203,8 +207,9 @@ export const CruiseProvider = ({ children }) => {
       setIsSyncModalOpen,
       linkReservation,
       addItineraryEvent,
+      addItineraryDay,
       toggleJoinEvent,
-      mockVenues: MOCK_VENUES,
+      venues: SHIP_VENUES,
       cruiseLines: CRUISE_LINES
     }}>
       {children}

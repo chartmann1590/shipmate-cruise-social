@@ -6,7 +6,7 @@ import { Image, MapPin, Send, Heart, Anchor, Waves, GlassWater, Ship, Sparkles, 
 
 export const SocialFeed = () => {
   const { posts, addPost, toggleReaction, addComment, activeFeedTab, setActiveFeedTab } = useSocial();
-  const { activeShip, currentDeckLocation, mockVenues } = useCruise();
+  const { activeShip, currentDeckLocation, venues } = useCruise();
   const { currentUser, setIsAuthModalOpen } = useAuth();
 
   const [postContent, setPostContent] = useState('');
@@ -178,7 +178,7 @@ export const SocialFeed = () => {
                   cursor: 'pointer'
                 }}
               >
-                {mockVenues.map(v => (
+                {venues.map(v => (
                   <option key={v.id} value={`${v.name} - ${v.deck}`} style={{ background: '#0f172a' }}>
                     {v.name} ({v.deck})
                   </option>

@@ -1,4 +1,4 @@
-import { CRUISE_LINES as CORE_CRUISE_LINES } from './mockCruiseLines';
+import { CRUISE_LINES as CORE_CRUISE_LINES } from './cruiseLines';
 
 const line = (id, name, code, loyaltyProgram, tiers, ships) => ({
   id, name, code, color: '#2e7c83', badgeGradient: 'linear-gradient(135deg, #2e7c83, #0d3345)', loyaltyProgram, tiers, ships

@@ -1,4 +1,4 @@
-export const MOCK_VENUES = [
+export const SHIP_VENUES = [
   { id: 'lido_pool', name: 'Lido Deck Main Pool', deck: 'Deck 15', type: 'Pool & Bar' },
   { id: 'schooner_bar', name: 'Schooner Piano Bar', deck: 'Deck 6', type: 'Cocktails & Music' },
   { id: 'solarium', name: 'Adults Only Solarium', deck: 'Deck 14', type: 'Relaxation' },
@@ -12,7 +12,7 @@ export const MOCK_VENUES = [
   { id: 'observation_deck', name: 'Forward Observation Deck', deck: 'Deck 17', type: 'Scenic View' }
 ];
 
-export const MOCK_SHIPS = {
+export const SHIP_DETAILS = {
   wonder: {
     id: 'wonder',
     name: 'Wonder of the Seas',

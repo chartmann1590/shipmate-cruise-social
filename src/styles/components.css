@@ -619,6 +619,53 @@
   font-weight: 800;
 }
 
+.itinerary-secondary-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 15px;
+  border: 1px solid rgba(125, 221, 211, 0.35);
+  border-radius: 999px;
+  background: rgba(125, 221, 211, 0.1);
+  color: var(--primary-cyan);
+  font-weight: 800;
+}
+
+.live-weather {
+  color: var(--accent-gold);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.add-day-form {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.add-day-form input {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--border-glass);
+  border-radius: 9px;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+.add-day-form > div {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.add-day-form button {
+  padding: 9px 13px;
+  border-radius: 9px;
+  background: var(--accent-gold);
+  color: #102d44;
+  font-weight: 800;
+}
+
 .legal-page {
   max-width: 820px;
   margin: 0 auto;
