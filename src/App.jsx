@@ -19,6 +19,8 @@ import { NewGroupModal } from './components/Modals/NewGroupModal';
 import { SharePassModal } from './components/Modals/SharePassModal';
 import { AuthModal } from './components/Modals/AuthModal';
 import { LegalView } from './components/Legal/LegalView';
+import { OnboardingView } from './components/Onboarding/OnboardingView';
+import { ErrorBoundary } from './components/System/ErrorBoundary';
 
 import { WifiOff, Download, Sparkles, X } from './components/Icons';
 
@@ -35,6 +37,7 @@ const MainAppContent = () => {
   const { isOfflineMode } = useCruise();
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
+  const [showOnboardingSync, setShowOnboardingSync] = useState(false);
 
   useEffect(() => {
     const requestedTab = new URLSearchParams(window.location.search).get('tab');
@@ -53,7 +56,7 @@ const MainAppContent = () => {
   }, []);
 
   if (!authReady) {
-    return <div className="app-loading"><div className="loading-mark">⚓</div><p>Connecting you to the sailing...</p></div>;
+    return <div className="app-loading"><div className="splash-logo"><span>SM</span></div><div className="splash-wake" /><p>Charting your sailing space...</p><small>Connecting securely to ShipMate</small></div>;
   }
 
   const handleInstallPWA = () => {
@@ -67,6 +70,8 @@ const MainAppContent = () => {
       });
     }
   };
+
+  const needsOnboarding = Boolean(currentUser && (!currentUser.sailings?.length || !currentUser.cruiseStartDate || !currentUser.cruiseEndDate));
 
   return (
     <div className="app-container">
@@ -143,12 +148,13 @@ const MainAppContent = () => {
         {/* Main Route Switcher */}
         <main className="main-content">
           {activeTab === 'terms' || activeTab === 'privacy' ? <LegalView kind={activeTab} /> : null}
-          {!currentUser && !['feed', 'terms', 'privacy'].includes(activeTab) ? <div className="account-required"><span className="eyebrow">Private sailing space</span><h2>Join ShipMate to unlock this space</h2><p>Profiles, itineraries, group chats, calls, and sailing data are available to signed-in cruisers only.</p><button onClick={() => setIsAuthModalOpen(true)}>Sign in or create account</button></div> : null}
-          {currentUser && activeTab === 'feed' && <SocialFeed />}
-          {currentUser && activeTab === 'itinerary' && <ItineraryView />}
-          {currentUser && activeTab === 'chats' && <ChatHub />}
-          {currentUser && activeTab === 'tools' && <CruiseToolsView />}
-          {currentUser && activeTab === 'profile' && (
+          {needsOnboarding ? <OnboardingView user={currentUser} onSetSailing={() => setShowOnboardingSync(true)} /> : null}
+          {!needsOnboarding && !currentUser && !['feed', 'terms', 'privacy'].includes(activeTab) ? <div className="account-required"><span className="eyebrow">Private sailing space</span><h2>Join ShipMate to unlock this space</h2><p>Profiles, itineraries, group chats, calls, and sailing data are available to signed-in cruisers only.</p><button onClick={() => setIsAuthModalOpen(true)}>Sign in or create account</button></div> : null}
+          {currentUser && !needsOnboarding && activeTab === 'feed' && <SocialFeed />}
+          {currentUser && !needsOnboarding && activeTab === 'itinerary' && <ItineraryView />}
+          {currentUser && !needsOnboarding && activeTab === 'chats' && <ChatHub />}
+          {currentUser && !needsOnboarding && activeTab === 'tools' && <CruiseToolsView />}
+          {currentUser && !needsOnboarding && activeTab === 'profile' && (
             <ProfileView 
               onOpenSync={(sailing) => { setEditingSailing(sailing || null); setIsSyncOpen(true); }}
               onOpenSharePass={() => setIsSharePassOpen(true)} 
@@ -162,7 +168,7 @@ const MainAppContent = () => {
       <MobileNav activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {/* Global Modals */}
-      <CruiseSyncModal isOpen={isSyncOpen} initialSailing={editingSailing} onClose={() => { setIsSyncOpen(false); setEditingSailing(null); }} />
+      <CruiseSyncModal isOpen={isSyncOpen || showOnboardingSync} initialSailing={editingSailing} onClose={() => { setIsSyncOpen(false); setShowOnboardingSync(false); setEditingSailing(null); }} />
       <NewGroupModal />
       <SharePassModal isOpen={isSharePassOpen} onClose={() => setIsSharePassOpen(false)} />
       <AuthModal />
@@ -172,6 +178,7 @@ const MainAppContent = () => {
 
 export default function App() {
   return (
+    <ErrorBoundary>
     <AuthProvider>
       <CruiseProvider>
         <SocialProvider>
@@ -181,5 +188,6 @@ export default function App() {
         </SocialProvider>
       </CruiseProvider>
     </AuthProvider>
+    </ErrorBoundary>
   );
 }

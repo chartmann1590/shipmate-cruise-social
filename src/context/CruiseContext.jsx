@@ -32,7 +32,7 @@ export const CruiseProvider = ({ children }) => {
   const { currentUser, setCurrentUser } = useAuth();
   const [sailings, setSailings] = useState([]);
   const [activeSailingId, setActiveSailingId] = useState('');
-  const [activeShip, setActiveShip] = useState(() => findShip('RCCL', 'wonder', 'Wonder of the Seas'));
+  const [activeShip, setActiveShip] = useState({ id: 'unset', name: 'Choose a sailing', dates: 'No sailing selected', currentVoyage: 'Set up your first sailing', homePort: 'Ready when you are', ports: [] });
   const [itinerary, setItinerary] = useState(INITIAL_ITINERARY);
   const [isOfflineMode, setIsOfflineMode] = useState(false);
   const [drinkCount, setDrinkCount] = useState(0);
@@ -50,6 +50,7 @@ export const CruiseProvider = ({ children }) => {
       setSailings([]);
       setActiveSailingId('');
       setItinerary(INITIAL_ITINERARY);
+      setActiveShip({ id: 'unset', name: 'Choose a sailing', dates: 'No sailing selected', currentVoyage: 'Set up your first sailing', homePort: 'Ready when you are', ports: [] });
       return;
     }
 
