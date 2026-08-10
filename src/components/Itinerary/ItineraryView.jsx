@@ -18,7 +18,7 @@ export const ItineraryView = () => {
 
   const currentDay = itinerary[activeDayIndex] || itinerary[0] || { day: 1, date: 'Day 1', title: 'Your first cruise day', port: 'Choose a port or sea day', type: 'sea', status: 'today', weather: 'Weather will load for a real location', events: [] };
 
-  useEffect(() => { let active = true; setLiveWeather('Loading live weather…'); fetchPortWeather(currentDay?.port).then((weather) => { if (active) setLiveWeather(weather || currentDay?.weather || 'Weather unavailable'); }).catch(() => active && setLiveWeather(currentDay?.weather || 'Weather unavailable')); return () => { active = false; }; }, [currentDay?.port]);
+  useEffect(() => { let active = true; setLiveWeather('Loading live weather…'); fetchPortWeather(currentDay?.port).then((weather) => { if (active) setLiveWeather(weather || 'Weather unavailable for this location'); }).catch(() => active && setLiveWeather('Weather unavailable for this location')); return () => { active = false; }; }, [currentDay?.port]);
 
   const handleAddEvent = (e) => {
     e.preventDefault();
